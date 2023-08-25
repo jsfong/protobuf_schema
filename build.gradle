@@ -1,0 +1,69 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.3'
+    id 'io.spring.dependency-management' version '1.1.3'
+    id "com.google.protobuf" version "0.9.4"
+}
+
+group = 'com.protobuf'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    protoVersion = "3.21.9"
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:$protoVersion"
+    }
+
+    generateProtoTasks.generatedFilesBaseDir = "$projectDir/_autogen_"
+
+    generateProtoTasks {
+        all().forEach(task ->
+                task.builtins {
+                    java {
+
+                    }
+                })
+    }
+}
+
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation "com.google.protobuf:protobuf-java:$protoVersion"
+    implementation "com.google.protobuf:protobuf-java-util:$protoVersion"
+    implementation 'net.logstash.logback:logstash-logback-encoder:7.2'
+    implementation "org.apache.commons:commons-lang3:3.12.0"
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDir 'src/main/proto'
+        }
+        java {
+            // include self written and generated code
+            srcDirs 'src/main/java'
+        }
+    }
+    // remove the test configuration - at least in your example you don't have a special test proto file
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

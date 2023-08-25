@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+
+package tutorial;
+
+option java_package = "com.protobuf.demo";
+option java_outer_classname = "CubsObjectProto";
+
+message CubsObject {
+  string id = 1;
+  string model_id = 2;
+  string name = 3;
+
+  //List
+
+  //Map
+
+  //Object
+  google.protobuf.Value payload = 6;
+}
